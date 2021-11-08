@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { initMap, randomGrid } from "../utils/initMap"
 import Block from "../components/Block"
-import { KEY } from "../constants/app.constant"
+import { KEY, EMPTY_CELL } from "../constants/app.constant"
 import Grid from "./Grid"
 
 const Board = () => {
@@ -9,9 +9,10 @@ const Board = () => {
   console.log(board)
 
   const setupController = () => {
-    let boardClone = [...board]
-    let moved = false;
     document.onkeydown = (e) => {
+      let boardClone = [...board]
+      let moved = false
+      let traverseIndex = 0
       switch (e.keyCode) {
         case KEY.UP:
           for (let i = 3; i >= 1; i--) {
@@ -27,6 +28,21 @@ const Board = () => {
               }
             }
           }
+          
+        // for(let i = 0; i < 4; i++) {
+        //     let stack = []
+        //     for(let j = 0; j < 4 ; j++) {
+        //         stack.push(boardClone[j][i])
+        //     }
+
+        //     do {
+        //         let head = stack[0]
+        //         if(head === EMPTY_CELL) {
+        //             stack.shift()
+        //         }
+        //     } while (stack.length < 5)
+            
+        // }
           break
         case KEY.DOWN:
           for (let i = 0; i < 3; i++) {
@@ -57,27 +73,27 @@ const Board = () => {
               }
             }
           }
-        break
+          break
         case KEY.RIGHT:
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 3; j++) {
-                  if (boardClone[i][j + 1] == 0) {
-                    boardClone[i][j + 1] = boardClone[i][j]
-                    boardClone[i][j] = 0
-                    moved = true
-                  } else if (boardClone[i][j + 1] == boardClone[i][j]) {
-                    boardClone[i][j + 1] *= 2
-                    boardClone[i][j] = 0
-                    moved = true
-                  }
-                }
+          for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 3; j++) {
+              if (boardClone[i][j + 1] == 0) {
+                boardClone[i][j + 1] = boardClone[i][j]
+                boardClone[i][j] = 0
+                moved = true
+              } else if (boardClone[i][j + 1] == boardClone[i][j]) {
+                boardClone[i][j + 1] *= 2
+                boardClone[i][j] = 0
+                moved = true
               }
+            }
+          }
         default:
           break
       }
-      if(moved) {
-          boardClone = randomGrid(boardClone)
-          setBoard(boardClone)
+      if (moved) {
+        boardClone = randomGrid(boardClone)
+        setBoard(boardClone)
       }
     }
   }
@@ -85,7 +101,7 @@ const Board = () => {
   useState(setupController())
   return (
     <div className="board">
-    <Grid></Grid>
+      <Grid></Grid>
       <div className="block-container">
         {board.map((row, i) => {
           return row.map((block, j) => {

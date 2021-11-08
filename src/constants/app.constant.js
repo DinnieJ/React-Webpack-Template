@@ -6,5 +6,6 @@ export const KEY = {
     ESC: 27,
     ENTER: 13,
     SPACE_BAR: 32
-  }
-  
+}
+
+export const EMPTY_CELL = 0
